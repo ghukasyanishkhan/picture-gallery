@@ -1,0 +1,20 @@
+{
+    "name": "user/phpmvc-framework",
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "ghukasyanishkhan",
+            "email": "ghukasyanishxan@gmail.com"
+        }
+    ],
+
+    "require": {
+        "vlucas/phpdotenv": "^5.6",
+      "ext-pdo": "*",
+        "ext-json": "*"
+    }
+}
