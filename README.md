@@ -16,8 +16,6 @@ Follow these steps to set up the project:
 
 1. **Clone the repository:**
 
-   Open your terminal or command prompt and run the following commands:
-
 git clone project
 cd your project
 
