@@ -2,7 +2,6 @@
 
 namespace app\core;
 
-
 use app\core\db\Database;
 use app\core\db\DbModel;
 
@@ -25,27 +24,36 @@ class Application
     {
         self::$app = $this;
         self::$ROOT_DIR = $rootPath;
+
+        // Initialize core components
         $this->request = new Request();
         $this->response = new Response();
         $this->router = new Router($this->request, $this->response);
         $this->db = new Database($config['db']);
         $this->session = new Session();
+        $this->view = new View();
+
+        // Set user class
         $this->userClass = $config['userClass'];
-        $this->view=new View();
+
+        // Initialize user based on session
         $primaryValue = $this->session->get('user');
-        if ($primaryValue) {
+        if ($primaryValue !== null) {
             $primaryKey = (new $this->userClass)->primaryKey();
-            $this->user = (new $this->userClass)->findOne([$primaryKey => $primaryValue]);
+            $user = (new $this->userClass)->findOne([$primaryKey => $primaryValue]);
+            if ($user) {
+                $this->user = $user;
+            } else {
+                $this->user = null;
+            }
         } else {
             $this->user = null;
         }
-
-
     }
 
     public static function isGuest()
     {
-        return !Application::$app->user;
+        return !self::$app->user;
     }
 
     public function run()
@@ -56,7 +64,6 @@ class Application
             $this->response->setStatusCode($e->getCode());
             echo $this->view->renderView('_error', ['exception' => $e]);
         }
-
     }
 
     public function getController(): Controller
@@ -83,5 +90,4 @@ class Application
         $this->user = null;
         $this->session->remove('user');
     }
-
 }
